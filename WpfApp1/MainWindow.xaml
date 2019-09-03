@@ -1,0 +1,31 @@
+﻿<controls:MetroWindow x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:vms="clr-namespace:WpfApp1.ViewModels"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Title="MainWindow" Height="450" Width="800">
+    <controls:MetroWindow.Resources>
+        <ResourceDictionary>
+            <vms:MainViewModel x:Key="MainViewModel" />
+        </ResourceDictionary>
+    </controls:MetroWindow.Resources>
+    <Grid DataContext="{StaticResource MainViewModel}">
+        <!--<StackPanel>-->
+            <ListView ItemsSource="{Binding ChangedFiles}" Margin="0,0,0,37">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path}" Header="Path" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Status}" Header="Status" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Button Content="TEST" Command="{Binding SearchChangedFileCommand}" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+        <!--</StackPanel>-->
+    </Grid>
+</controls:MetroWindow>
