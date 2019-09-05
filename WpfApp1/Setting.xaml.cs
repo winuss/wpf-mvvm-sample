@@ -16,17 +16,13 @@ using System.Windows.Shapes;
 namespace WpfApp1
 {
     /// <summary>
-    /// MainWindow.xaml에 대한 상호 작용 논리
+    /// Setting.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class MainWindow// : Window
+    public partial class Setting : UserControl
     {
-        public MainWindow()
+        public Setting()
         {
             InitializeComponent();
-
-            //psbar.ac
-
-            //DialogHost.IsOpen = true;
         }
     }
 }

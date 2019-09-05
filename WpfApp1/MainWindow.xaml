@@ -4,20 +4,50 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:vms="clr-namespace:WpfApp1.ViewModels"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="400">
     <controls:MetroWindow.Resources>
         <ResourceDictionary>
             <vms:MainViewModel x:Key="MainViewModel" />
         </ResourceDictionary>
     </controls:MetroWindow.Resources>
-    <Grid DataContext="{StaticResource MainViewModel}">
+    <materialDesign:DialogHost DataContext="{StaticResource MainViewModel}" IsOpen="{Binding IsWating}">
+        <materialDesign:DialogHost.DialogContent>
+            <Grid >
+                <StackPanel Margin="26,16">
+                    <ProgressBar
+                          Style="{DynamicResource MaterialDesignCircularProgressBar}"
+                          HorizontalAlignment="Center"
+                          Margin="16"
+                          IsIndeterminate="True"
+                          Value="0" />
+                    <TextBlock Style="{StaticResource MaterialDesignButtonTextBlock}" Text="Wating..."/>
+                </StackPanel>
+            </Grid>
+        </materialDesign:DialogHost.DialogContent>
+        <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="34" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="200"/>
+            <RowDefinition Height="60" />
+        </Grid.RowDefinitions>
         <!--<StackPanel>-->
-            <ListView ItemsSource="{Binding ChangedFiles}" Margin="0,0,0,37">
+
+        <Grid Grid.Row="0" Background="#FFDADADA">
+            <Button Style="{StaticResource MaterialDesignFlatButton}" Content="{materialDesign:PackIcon Refresh}" HorizontalAlignment="Left" Margin="0,0,4,0" Padding="6,0,6,0" ToolTip="새로고침"/>
+            <TextBlock Text="변경될 파일 리스트 입니다." VerticalAlignment="Center" FontWeight="Bold" HorizontalAlignment="Left" Margin="30,0,0,0"/>
+            <materialDesign:PopupBox StaysOpen="True" IsEnabled="{Binding IsChecked, ElementName=PopupEnabled}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,4,0" ToolTip="설정">
+                <local:Setting></local:Setting>
+            </materialDesign:PopupBox>
+        </Grid>
+        <Grid Grid.Row="1">
+            <ListView ItemsSource="{Binding ChangedFiles}" Background="White">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding Path}" Header="Path" />
@@ -25,7 +55,61 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <Button Content="TEST" Command="{Binding SearchChangedFileCommand}" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+        </Grid>
+        <Grid Grid.Row="2">
+            <TextBox
+                TextWrapping="Wrap"
+                Padding="2"
+                MinWidth="280"
+                AcceptsReturn="True"
+                VerticalScrollBarVisibility="Auto"
+                SpellCheck.IsEnabled="True"
+                IsReadOnly="True"
+                Opacity=".68"
+                materialDesign:HintAssist.Hint="Message..." Height="206" Background="#FFF1F1F1"
+                Text="{Binding Message}" Foreground="#DD636363"
+                />
+            <!--<ListBox x:Name="FruitListBox" Background="#FFE2E2E2">
+                <ListBoxItem>
+                    Message...
+                </ListBoxItem>
+                <ListBoxItem>
+                    검증 결과 문제가 있습니다.
+                </ListBoxItem>
+                <ListBoxItem>
+                    검증 결과 문제가 있습니다.
+                </ListBoxItem>
+            </ListBox>-->
+        </Grid>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Background="#FFD4E5F3">
+            <ComboBox materialDesign:HintAssist.Hint="적용서버" IsEditable="True" materialDesign:HintAssist.HintOpacity=".26" Width="160" Margin="10,0">
+                <ComboBoxItem>
+                    기획테스트서버1
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    기획테스트 서버2
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    기획테스트서버3
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    기획테스트서버4
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    기획테스트서버5
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    개발서버
+                </ComboBoxItem>
+            </ComboBox>
+            <materialDesign:Badged Badge="3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" >
+                <Button Content="적용"  Command="{Binding SearchChangedFileCommand}" Width="100"/>
+            </materialDesign:Badged>
+
+                <Button Content="TEST" Command="{Binding DialogCommand}" Width="100" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" />
+                <Button Content="작업중" Command="{Binding WatingCommand}" Width="100" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            </StackPanel>
         <!--</StackPanel>-->
     </Grid>
+    </materialDesign:DialogHost>
 </controls:MetroWindow>

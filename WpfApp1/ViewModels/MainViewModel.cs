@@ -25,9 +25,51 @@ namespace WpfApp1.ViewModels
             }
         }
 
-        public ICommand SearchChangedFileCommand { get { return new DelegateCommand(OnSearchChangedFiles); } }
+        private string _message;
+        public string Message
+        {
+            get { return _message; }
+            set
+            {
+                if (_message != value)
+                {
+                    _message = value;
+                    RaisePropertyChanged(() => Message);
+                }
+            }
+        }
 
-        public virtual void OnSearchChangedFiles(object parameter)
+        private bool _isWating;
+        public bool IsWating
+        {
+            get { return _isWating; }
+            set
+            {
+                if (_isWating != value)
+                {
+                    _isWating = value;
+                    RaisePropertyChanged(() => IsWating);
+                }
+            }
+        }
+
+        public ICommand SearchChangedFileCommand { get { return new DelegateCommand(OnSearchChangedFiles); } }
+        public ICommand DialogCommand { get { return new DelegateCommand(OnDialogCommand); } }
+        public ICommand WatingCommand { get { return new DelegateCommand(OnWatingCommand); } }
+
+        private void OnWatingCommand(object obj)
+        {
+            IsWating = true;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        private void OnDialogCommand(object obj)
+        {
+            Message += "템플릿 정보가 문제가 있습니다.\n";
+            //sb.Append("템플릿 정보가 문제가 있습니다.");
+        }
+
+        public void OnSearchChangedFiles(object parameter)
         {
             this.ChangedFiles.Add(
                 new ChangedFile() { Path = "TestFile.csv", Status = "Change" }
