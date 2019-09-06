@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WpfApp1.Contents;
 using WpfApp1.Helpers;
+using WpfApp1.Models;
 
 namespace WpfApp1.ViewModels
 {

@@ -10,106 +10,52 @@
         mc:Ignorable="d"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        Title="MainWindow" Height="600" Width="400">
-    <controls:MetroWindow.Resources>
-        <ResourceDictionary>
-            <vms:MainViewModel x:Key="MainViewModel" />
-        </ResourceDictionary>
-    </controls:MetroWindow.Resources>
-    <materialDesign:DialogHost DataContext="{StaticResource MainViewModel}" IsOpen="{Binding IsWating}">
-        <materialDesign:DialogHost.DialogContent>
-            <Grid >
-                <StackPanel Margin="26,16">
-                    <ProgressBar
-                          Style="{DynamicResource MaterialDesignCircularProgressBar}"
-                          HorizontalAlignment="Center"
-                          Margin="16"
-                          IsIndeterminate="True"
-                          Value="0" />
-                    <TextBlock Style="{StaticResource MaterialDesignButtonTextBlock}" Text="Wating..."/>
-                </StackPanel>
-            </Grid>
-        </materialDesign:DialogHost.DialogContent>
-        <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="34" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="200"/>
-            <RowDefinition Height="60" />
-        </Grid.RowDefinitions>
-        <!--<StackPanel>-->
-
-        <Grid Grid.Row="0" Background="#FFDADADA">
-            <Button Style="{StaticResource MaterialDesignFlatButton}" Content="{materialDesign:PackIcon Refresh}" HorizontalAlignment="Left" Margin="0,0,4,0" Padding="6,0,6,0" ToolTip="새로고침"/>
-            <TextBlock Text="변경될 파일 리스트 입니다." VerticalAlignment="Center" FontWeight="Bold" HorizontalAlignment="Left" Margin="30,0,0,0"/>
-            <materialDesign:PopupBox StaysOpen="True" IsEnabled="{Binding IsChecked, ElementName=PopupEnabled}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,4,0" ToolTip="설정">
-                <local:Setting></local:Setting>
-            </materialDesign:PopupBox>
-        </Grid>
-        <Grid Grid.Row="1">
-            <ListView ItemsSource="{Binding ChangedFiles}" Background="White">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path}" Header="Path" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Status}" Header="Status" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </Grid>
-        <Grid Grid.Row="2">
-            <TextBox
-                TextWrapping="Wrap"
-                Padding="2"
-                MinWidth="280"
-                AcceptsReturn="True"
-                VerticalScrollBarVisibility="Auto"
-                SpellCheck.IsEnabled="True"
-                IsReadOnly="True"
-                Opacity=".68"
-                materialDesign:HintAssist.Hint="Message..." Height="206" Background="#FFF1F1F1"
-                Text="{Binding Message}" Foreground="#DD636363"
-                />
-            <!--<ListBox x:Name="FruitListBox" Background="#FFE2E2E2">
-                <ListBoxItem>
-                    Message...
-                </ListBoxItem>
-                <ListBoxItem>
-                    검증 결과 문제가 있습니다.
-                </ListBoxItem>
-                <ListBoxItem>
-                    검증 결과 문제가 있습니다.
-                </ListBoxItem>
-            </ListBox>-->
-        </Grid>
-        <StackPanel Grid.Row="3" Orientation="Horizontal" Background="#FFD4E5F3">
-            <ComboBox materialDesign:HintAssist.Hint="적용서버" IsEditable="True" materialDesign:HintAssist.HintOpacity=".26" Width="160" Margin="10,0">
-                <ComboBoxItem>
-                    기획테스트서버1
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    기획테스트 서버2
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    기획테스트서버3
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    기획테스트서버4
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    기획테스트서버5
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    개발서버
-                </ComboBoxItem>
-            </ComboBox>
-            <materialDesign:Badged Badge="3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" >
-                <Button Content="적용"  Command="{Binding SearchChangedFileCommand}" Width="100"/>
-            </materialDesign:Badged>
-
-                <Button Content="TEST" Command="{Binding DialogCommand}" Width="100" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" />
-                <Button Content="작업중" Command="{Binding WatingCommand}" Width="100" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            </StackPanel>
-        <!--</StackPanel>-->
-    </Grid>
+        WindowTitleBrush="#2d2d30"
+        BorderBrush="#2196f3"
+        Title="NOPS Desktop" Height="600" Width="400">
+    <materialDesign:DialogHost Identifier="RootDialog" SnackbarMessageQueue="{Binding ElementName=MainSnackbar, Path=MessageQueue}">
+        <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <DockPanel MinWidth="212">
+                    <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
+                                    DockPanel.Dock="Top"
+                                    HorizontalAlignment="Right" Margin="16"
+                                    IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
+                    <ListBox x:Name="MenuItemsListBox" Margin="0 16 0 16" SelectedIndex="0"                         
+                             ItemsSource="{Binding DemoItems}"
+                             PreviewMouseLeftButtonUp="UIElement_OnPreviewMouseLeftButtonUp">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="domain:DemoItem">
+                                <TextBlock Text="{Binding Name}" Margin="32 0 32 0" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+            <DockPanel>
+                <materialDesign:ColorZone Mode="PrimaryMid" Padding="6" DockPanel.Dock="Top" Background="#333333">
+                    <DockPanel>
+                        <materialDesign:PopupBox DockPanel.Dock="Right" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False">
+                            <StackPanel>
+                                <Button Content="NDB Path"/>
+                                <Button Content="Nice Popup"/>
+                                <Button Content="Can't Touch This" IsEnabled="False" />
+                                <Separator/>
+                                <Button Content="Goodbye"/>
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                        <StackPanel Orientation="Horizontal">
+                            <ToggleButton Style="{DynamicResource MaterialDesignHamburgerToggleButton}" x:Name="MenuToggleButton"/>
+                            <TextBlock VerticalAlignment="Center" Margin="16 0 0 0" Text="{Binding ElementName=MenuItemsListBox, Path=SelectedItem.Name}"/>
+                        </StackPanel>
+                    </DockPanel>
+                </materialDesign:ColorZone>
+                <Grid>
+                    <!--<ScrollViewer>-->
+                    <ContentControl Content="{Binding ElementName=MenuItemsListBox, Path=SelectedItem.Content}" />
+                    <!--</ScrollViewer>-->
+                </Grid>
+            </DockPanel>
+        </materialDesign:DrawerHost>
     </materialDesign:DialogHost>
 </controls:MetroWindow>
